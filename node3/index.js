@@ -38,6 +38,16 @@ router.get("/alumnos", async (req,res)=>{
     }
 })
 
+router.get("/alumnos/:dni", async (req,res)=>{
+    try{
+        const alumnos = await Alumno.findOne({dni: req.params.dni})
+        res.json(alumnos)
+    }catch(error){
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
 router.post("/alumnos", async (req,res)=>{
     try {
         const nuevoAlumno = new Alumno({
@@ -47,6 +57,53 @@ router.post("/alumnos", async (req,res)=>{
         })
         await nuevoAlumno.save()
         res.json(nuevoAlumno)
+    } catch (error) {
+        console.log(error)
+        res.status(500)
+        res.json({msg: error})
+    }
+})
+
+router.patch("/alumnos/:id",async(req,res)=>{
+    try {
+        await Alumno.findByIdAndUpdate(req.params.id,req.body)
+        res.json({msg: 'Alumno actualizado'})
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+// hacer lo mismo (GET asignaturas y POST asginaturas)
+// para pdoer consultar y añadir asignaturas
+router.get("/asignaturas", async (req,res)=>{
+    try{
+        const asignaturas = await Asignatura.find()
+        res.json(asignaturas)
+    }catch(error){
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+router.post("/asignaturas", async (req,res)=>{
+    try {
+        const nuevaAsignatura = new Asignatura({
+            nombre: req.body.nombre,
+        })
+        await nuevaAsignatura.save()
+        res.json(nuevaAsignatura)
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+router.delete("/asignaturas/:id",async (req,res)=>{
+    try {
+        //const resultado = await Asignatura.deleteOne({ _id: req.params.id })
+        const resultado = await Asignatura.findByIdAndDelete(req.params.id)
+        res.json({msg: resultado})
     } catch (error) {
         res.status(500)
         res.json({msg: 'Ha ocurrido un error inesperado'})
