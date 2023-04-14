@@ -1,7 +1,8 @@
 const Alumno = require('../models/alumno.model')
 
 async function obtenerTodos(){
-    const alumnos = await Alumno.find()
+    // el populate sirve para que traiga el objeto dirección en lugar de el ID
+    const alumnos = await Alumno.find().populate('direccion')
     return alumnos
 }
 
@@ -20,7 +21,8 @@ async function crear(body){
     const nuevoAlumno = new Alumno({
         nombre: body.nombre,
         dni: body.dni,
-        edad: body.edad
+        edad: body.edad,
+        direccion: body.direccion,
     })
     await nuevoAlumno.save()
     return nuevoAlumno

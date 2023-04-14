@@ -15,6 +15,10 @@ const alumnoSchema = new mongoose.Schema({
     },
     apellidos:{
         type: String,
+    },
+    direccion:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Direccion"
     }
 })
 
