@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const Alumno = require('./models/alumno.model')
 const Asignatura = require('./models/asignatura.model')
+const Profesor = require('./models/profesor.model')
 
 const server = express()
 
@@ -110,6 +111,60 @@ router.delete("/asignaturas/:id",async (req,res)=>{
     }
 })
 
+router.get("/profesores",async(req,res)=>{
+    try {
+        const resultado = await Profesor.find()
+        res.json(resultado)
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+
+router.post("/profesores",async(req,res)=>{
+    try {
+        const nuevoProfe = new Profesor({
+            nombre: req.body.name,
+            apellidos: req.body.lastname,
+        })
+        await nuevoProfe.save()
+        res.json(nuevoProfe)
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+router.delete("/profesores/:id",async(req,res)=>{
+    try {
+        await Profesor.findByIdAndDelete(req.params.id)
+        res.json({msg: "profesor eliminado correctamente!"})
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+router.put("/profesores/:id",async(req,res)=>{
+    try {
+        const resultado = await Profesor.replaceOne({_id: req.params.id},req.body)
+        res.json(resultado)
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
+
+router.patch("/profesores/:id",async(req,res)=>{
+    try {
+        await Profesor.findByIdAndUpdate(req.params.id, req.body)
+        res.json({msg: 'profesor actualizado parcialmente'})
+    } catch (error) {
+        res.status(500)
+        res.json({msg: 'Ha ocurrido un error inesperado'})
+    }
+})
 
 
 server.listen(3000, ()=>{
