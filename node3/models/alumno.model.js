@@ -13,6 +13,9 @@ const alumnoSchema = new mongoose.Schema({
         required: true,
         type: Number,
     },
+    esAdmin:{
+        type: Boolean,
+    },
     apellidos:{
         type: String,
     },
